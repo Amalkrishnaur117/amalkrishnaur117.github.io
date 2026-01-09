@@ -294,7 +294,7 @@
         function showSection(id, el) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            
+
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if (el) el.classList.add('active');
 
@@ -303,11 +303,20 @@
                 MathJax.typesetPromise();
             }
 
-            // Trigger canvas renders
+            // Trigger canvas renders for specific sections
+            if(id === 'math-linear') {
+                if(typeof updateMatrixViz === 'function') updateMatrixViz();
+                if(typeof initSpanViz === 'function') initSpanViz();
+                if(typeof drawSpanViz === 'function') drawSpanViz();
+            }
             if(id === 'math-calculus') {
                 if(typeof drawGradViz === 'function') drawGradViz();
                 if(typeof drawLineIntViz === 'function') drawLineIntViz();
                 if(typeof drawVectorFieldViz === 'function') drawVectorFieldViz();
+            }
+            if(id === 'math-probability') {
+                if(typeof drawProbViz === 'function') drawProbViz();
+                if(typeof drawDistViz === 'function') drawDistViz();
             }
         }
 
