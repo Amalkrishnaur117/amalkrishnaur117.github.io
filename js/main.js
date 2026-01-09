@@ -329,27 +329,43 @@
             document.getElementById('arch-math').innerHTML = data.math;
             if(window.MathJax) MathJax.typesetPromise();
             
-            // Trigger specific viz if needed
+            // Trigger specific viz if needed, using the new robust method
             if(archId === 'neuron') {
-                setTimeout(drawNeuronViz, 50); // Small delay for DOM to render
+                waitForElementAndDraw('#neuronCanvas', drawNeuronViz);
             }
         }
 
+        // --- UTILITY ---
+        function waitForElementAndDraw(selector, drawFunction) {
+            let attempts = 0;
+            const maxAttempts = 50; // Try for ~1 second
+
+            function check() {
+                const element = document.querySelector(selector);
+                if (element) {
+                    drawFunction();
+                } else if (attempts < maxAttempts) {
+                    attempts++;
+                    requestAnimationFrame(check);
+                } else {
+                    console.error(`Failed to find element with selector: ${selector}`);
+                }
+            }
+            check();
+        }
+
         window.onload = function() {
+            // Initial state setup
             updateLab();
             initScenarios();
             
-            // Initialize Visualizations from math-viz.js
-            if(typeof updateMatrixViz === 'function') updateMatrixViz();
-            if(typeof drawGradViz === 'function') drawGradViz();
-            if(typeof drawProbViz === 'function') drawProbViz();
-            if(typeof setVectorMode === 'function') {
-                setVectorMode('sink'); 
-                drawVectorFieldViz();
-            }
-            if(typeof setDistMode === 'function') setDistMode('bernoulli');
-            if(typeof initSpanViz === 'function') {
-                initSpanViz();
-                drawSpanViz();
-            }
+            // Initial Draws for visible canvases on load
+            updateMatrixViz();
+            drawGradViz();
+            drawProbViz();
+            setVectorMode('sink'); 
+            drawVectorFieldViz(); // This starts an animation loop
+            setDistMode('bernoulli');
+            initSpanViz();
+            drawSpanViz();
         };

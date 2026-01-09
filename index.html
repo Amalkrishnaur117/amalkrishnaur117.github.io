@@ -52,6 +52,9 @@
         <div class="nav-item" onclick="showSection('math-optimization', this)">
             <i class="fa-solid fa-mountain"></i> Optimization
         </div>
+        <div class="nav-item" onclick="showSection('math-tensor-gr', this)">
+            <i class="fa-solid fa-atom"></i> Tensor Calculus (GR)
+        </div>
         
         <div style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; margin: 1.5rem 0 0.5rem 0; letter-spacing: 1px;">Model Zoo</div>
         <div class="nav-item" onclick="showSection('architecture-lab', this)">
@@ -777,6 +780,51 @@
             </div>
         </section>
 
+        <!-- SECTION: MATH - TENSOR CALCULUS (GR) -->
+        <section id="math-tensor-gr" class="section">
+            <header>
+                <h1>Tensor Calculus for General Relativity</h1>
+                <p>The mathematics of curved spacetime. How gravity emerges from geometry.</p>
+            </header>
+
+            <div class="card">
+                <h2>I. Manifolds & The Metric Tensor</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>Manifolds</h3>
+                        <p>Spaces that are "locally flat" (Euclidean) but can be globally curved. Think of the surface of the Earth.</p>
+                    </div>
+                    <div>
+                        <h3>The Metric Tensor ($g_{\mu\nu}$)</h3>
+                        <p>Generalizes the dot product. It defines distances and angles on a manifold.</p>
+                        <div class="equation-box">$$ ds^2 = \sum_{\mu,\nu} g_{\mu\nu} dx^\mu dx^\nu $$</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>II. Parallel Transport, Geodesics & Curvature</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>Christoffel Symbols ($\Gamma^\lambda_{\mu\nu}$)</h3>
+                        <p>The "correction factors" for derivatives on a curved surface. They describe how basis vectors change.</p>
+                    </div>
+                    <div>
+                        <h3>Geodesics</h3>
+                        <p>The "straightest possible lines" on a curved manifold. The path a free-falling object follows.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>III. Interactive Curved Space Lab</h2>
+                <p>Visualize parallel transport of a vector on a 2D sphere projection.</p>
+                <div style="background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; min-height: 350px;">
+                    <canvas id="grCanvas" width="400" height="350"></canvas>
+                </div>
+            </div>
+        </section>
+ 
         <!-- SECTION: ARCHITECTURE LAB -->
         <section id="architecture-lab" class="section">
             <header>
@@ -837,8 +885,8 @@
 
     </main>
 
-    <script src="js/content.js"></script>
-    <script src="js/math-viz.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/content.js" defer></script>
+    <script src="js/math-viz.js" defer></script>
+    <script src="js/main.js" defer></script>
 </body>
 </html>

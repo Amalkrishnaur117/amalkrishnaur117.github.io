@@ -274,6 +274,8 @@
             }
             
             controls.innerHTML = html;
+            
+            // The sliders are now in the DOM, so we can safely draw.
             drawDistViz();
         }
 
