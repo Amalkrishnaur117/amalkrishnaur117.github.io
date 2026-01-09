@@ -133,12 +133,37 @@
         <div class="brand">
             <i class="fa-solid fa-brain"></i> NeuroLab
         </div>
+
+        <div style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 1px;">Simulators</div>
         <div class="nav-item active" onclick="showSection('dashboard', this)">
             <i class="fa-solid fa-chart-line"></i> Gradient Lab
         </div>
         <div class="nav-item" onclick="showSection('scenarios', this)">
             <i class="fa-solid fa-bug"></i> Debugging Game
         </div>
+
+        <div style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; margin: 1.5rem 0 0.5rem 0; letter-spacing: 1px;">Math Foundations</div>
+        <div class="nav-item" onclick="showSection('math-linear', this)">
+            <i class="fa-solid fa-vector-square"></i> Linear Algebra
+        </div>
+        <div class="nav-item" onclick="showSection('math-calculus', this)">
+            <i class="fa-solid fa-wave-square"></i> Calculus & Opt.
+        </div>
+        <div class="nav-item" onclick="showSection('math-probability', this)">
+            <i class="fa-solid fa-dice"></i> Prob. & Stats
+        </div>
+        <div class="nav-item" onclick="showSection('math-tensors', this)">
+            <i class="fa-solid fa-cubes"></i> Tensors
+        </div>
+        <div class="nav-item" onclick="showSection('math-optimization', this)">
+            <i class="fa-solid fa-mountain"></i> Optimization
+        </div>
+        
+        <div style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; margin: 1.5rem 0 0.5rem 0; letter-spacing: 1px;">Model Zoo</div>
+        <div class="nav-item" onclick="showSection('architecture-lab', this)">
+            <i class="fa-solid fa-layer-group"></i> Architecture Lab
+        </div>
+        
         <div class="nav-item" onclick="showSection('methodology', this)">
             <i class="fa-solid fa-book-open"></i> Methodology
         </div>
@@ -292,6 +317,333 @@
                         <div class="diagnosis-box" id="sc-diagnosis"></div>
                     </div>
 
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: MATH - LINEAR ALGEBRA -->
+        <section id="math-linear" class="section">
+            <header>
+                <h1>Linear Algebra: The Space of Data</h1>
+                <p>The stage where Deep Learning happens. Understanding dimensions, transformations, and bases.</p>
+            </header>
+
+            <div class="card">
+                <h2>I. Fundamentals & Data Representation</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>Scalars, Vectors & Matrices</h3>
+                        <ul>
+                            <li><strong>Scalar ($x \in \mathbb{R}$):</strong> A single number (e.g., Learning Rate).</li>
+                            <li><strong>Vector ($v \in \mathbb{R}^n$):</strong> An array of numbers. Represents a point in space or a direction.
+                                <div class="equation-box">$$ v = [x_1, x_2, \dots, x_n]^T $$</div>
+                            </li>
+                            <li><strong>Matrix ($A \in \mathbb{R}^{m \times n}$):</strong> A 2D array. Represents a linear map or a dataset.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>The Dot Product (Similarity)</h3>
+                        <p>The most important operation in DL. It measures alignment between two vectors.</p>
+                        <div class="equation-box">$$ a \cdot b = ||a|| ||b|| \cos(\theta) = \sum a_i b_i $$</div>
+                        <p>If $a \cdot b = 0$, they are <strong>Orthogonal</strong> (uncorrelated).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>II. Matrix Operations as Transformations</h2>
+                <p>A Neural Network layer $y = \sigma(Wx + b)$ is just a linear transformation followed by a non-linearity.</p>
+                <div class="grid-2">
+                    <div>
+                        <h3>Matrix-Vector Multiplication</h3>
+                        <p>Matrix $W$ transforms vector $x$ (rotate, scale, shear).</p>
+                        <div class="equation-box">$$ y = Wx $$</div>
+                        <p>Think of columns of $W$ as the <strong>new basis vectors</strong> for the output space.</p>
+                    </div>
+                    <div>
+                        <h3>Determinant</h3>
+                        <p>$\det(W)$ measures how the transformation changes <strong>volume</strong>.</p>
+                        <ul>
+                            <li>$\det(W) = 2$: Area doubles.</li>
+                            <li>$\det(W) = 0$: Dimension collapse (Information lost!).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>IV. Interactive Transformation Lab</h2>
+                <p>Visualize how a matrix $A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}$ transforms 2D space.</p>
+                <div class="grid-2">
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; min-height: 300px;">
+                        <canvas id="matrixCanvas" width="300" height="300"></canvas>
+                    </div>
+                    <div>
+                        <div class="control-group">
+                            <div class="control-header"><span>Element $a$</span><span id="val-ma">1.0</span></div>
+                            <input type="range" min="-2" max="2" step="0.1" value="1" id="slider-ma" oninput="updateMatrixViz()">
+                        </div>
+                        <div class="control-group">
+                            <div class="control-header"><span>Element $b$</span><span id="val-mb">0.0</span></div>
+                            <input type="range" min="-2" max="2" step="0.1" value="0" id="slider-mb" oninput="updateMatrixViz()">
+                        </div>
+                        <div class="control-group">
+                            <div class="control-header"><span>Element $c$</span><span id="val-mc">0.0</span></div>
+                            <input type="range" min="-2" max="2" step="0.1" value="0" id="slider-mc" oninput="updateMatrixViz()">
+                        </div>
+                        <div class="control-group">
+                            <div class="control-header"><span>Element $d$</span><span id="val-md">1.0</span></div>
+                            <input type="range" min="-2" max="2" step="0.1" value="1" id="slider-md" oninput="updateMatrixViz()">
+                        </div>
+                        <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-dark); border-radius: 6px;">
+                            <p id="matrix-desc" style="margin:0; font-family: monospace; font-size: 0.9rem;">Identity Matrix: No change.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: MATH - CALCULUS -->
+        <section id="math-calculus" class="section">
+            <header>
+                <h1>Calculus: The Engine of Optimization</h1>
+                <p>Training a neural network is just minimizing a function. Calculus tells us which way to move.</p>
+            </header>
+            
+            <div class="card">
+                <h2>I. Multivariable Calculus Fundamentals</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>Partial Derivatives</h3>
+                        <p>How does the function change if we wiggle <em>only one</em> input variable $x_i$?</p>
+                        <div class="equation-box">$$ \frac{\partial f}{\partial x_i} = \lim_{h \to 0} \frac{f(x_1, \dots, x_i+h, \dots) - f(x)}{h} $$</div>
+                    </div>
+                    <div>
+                        <h3>The Gradient ($\nabla f$)</h3>
+                        <p>A vector collecting all partial derivatives. It points to the <strong>steepest ascent</strong>.</p>
+                        <div class="equation-box">$$ \nabla f = [\frac{\partial f}{\partial x_1}, \dots, \frac{\partial f}{\partial x_n}]^T $$</div>
+                        <p><strong>Update Rule:</strong> $\theta_{new} = \theta_{old} - \eta \nabla L$</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>II. Matrices of Derivatives</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>The Jacobian ($J$)</h3>
+                        <p>For vector-valued functions $f: \mathbb{R}^n \to \mathbb{R}^m$ (like a layer output), the derivative is a matrix.</p>
+                        <div class="equation-box">$$ J_{ij} = \frac{\partial y_i}{\partial x_j} $$</div>
+                        <p><strong>Backprop:</strong> Multiplying Jacobians layer-by-layer.</p>
+                    </div>
+                    <div>
+                        <h3>The Hessian ($H$)</h3>
+                        <p>The matrix of second derivatives (Curvature).</p>
+                        <div class="equation-box">$$ H_{ij} = \frac{\partial^2 f}{\partial x_i \partial x_j} $$</div>
+                        <p>Tells us if the critical point is a Minima, Maxima, or Saddle Point.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>III. Approximations & Expansions</h2>
+                <h3>Taylor Series Expansion</h3>
+                <p>We can approximate any smooth function near a point $x_0$ using polynomials.</p>
+                <div class="equation-box">$$ f(x) \approx f(x_0) + \nabla f(x_0)^T (x-x_0) + \frac{1}{2}(x-x_0)^T H(x-x_0) $$</div>
+                <p><strong>Gradient Descent</strong> is basically a first-order Taylor approximation. <strong>Newton's Method</strong> uses the second-order (Hessian).</p>
+            </div>
+        </section>
+
+        <!-- SECTION: MATH - PROBABILITY -->
+        <section id="math-probability" class="section">
+            <header>
+                <h1>Probability: Modeling Uncertainty</h1>
+                <p>The language of uncertainty. How we model noise, confidence, and generating new data.</p>
+            </header>
+
+            <div class="card">
+                <h2>I. Random Variables & Distributions</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>Types of Variables</h3>
+                        <ul>
+                            <li><strong>Discrete:</strong> Finite outcomes (e.g., Coin flip, Word in vocab). Uses <strong>PMF</strong>.</li>
+                            <li><strong>Continuous:</strong> Infinite outcomes (e.g., Height, Pixel value). Uses <strong>PDF</strong>.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Key Distributions in DL</h3>
+                        <ul>
+                            <li><strong>Bernoulli:</strong> Binary Classification ($P(y|x)$).</li>
+                            <li><strong>Categorical:</strong> Multi-class Classification (Softmax).</li>
+                            <li><strong>Gaussian (Normal):</strong> Regression errors, VAE latents.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>II. Maximum Likelihood Estimation (MLE)</h2>
+                <p>The bridge between Statisics and Optimization.</p>
+                <div class="equation-box">$$ \theta^* = \arg\max_\theta \prod_{i=1}^N P(x_i | \theta) $$</div>
+                <p>We convert the product to a sum using $\log$ (monotonicity) to get the <strong>Negative Log Likelihood (NLL)</strong> loss.</p>
+                <div class="equation-box">$$ L(\theta) = -\sum \log P(x_i | \theta) $$</div>
+                <p>Minimizing NLL is equivalent to minimizing Cross-Entropy.</p>
+            </div>
+
+            <div class="card">
+                <h2>III. Information Theory</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>Entropy ($H$)</h3>
+                        <p>The minimum number of bits needed to encode a message from distribution $P$. Measures uncertainty.</p>
+                        <div class="equation-box">$$ H(P) = -\mathbb{E}_{x \sim P}[\log P(x)] $$</div>
+                    </div>
+                    <div>
+                        <h3>KL Divergence ($D_{KL}$)</h3>
+                        <p>The "distance" between two probability distributions $P$ (True) and $Q$ (Predicted).</p>
+                        <div class="equation-box">$$ D_{KL}(P || Q) = \sum P(x) \log \frac{P(x)}{Q(x)} $$</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: MATH - TENSORS -->
+        <section id="math-tensors" class="section">
+            <header>
+                <h1>Tensors: The Language of Frameworks</h1>
+                <p>How PyTorch and TensorFlow actually see the world. Beyond Matrices.</p>
+            </header>
+
+            <div class="card">
+                <h2>I. What is a Tensor?</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>Definition</h3>
+                        <p>A multi-dimensional array of numerical data. A generalization of scalars and matrices.</p>
+                        <ul>
+                            <li><strong>Rank 0:</strong> Scalar (e.g., Loss)</li>
+                            <li><strong>Rank 1:</strong> Vector (e.g., Bias)</li>
+                            <li><strong>Rank 2:</strong> Matrix (e.g., Weights)</li>
+                            <li><strong>Rank 3:</strong> RGB Image ($C \times H \times W$)</li>
+                            <li><strong>Rank 4:</strong> Batch ($B \times C \times H \times W$)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Views & Strides</h3>
+                        <p>In memory, a Tensor is just a 1D array. "Shapes" are just views defined by <strong>Strides</strong> (how many steps to skip to get to the next element).</p>
+                        <p><code>reshape()</code> is often free ($O(1)$) because it just changes the stride, not the data.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>II. Operations & Broadcasting</h2>
+                <h3>Broadcasting Rules</h3>
+                <p>How do we add `(32, 10)` + `(10)`? Frameworks "stretch" the smaller tensor.</p>
+                <ol style="margin-left: 20px; color: var(--text-muted);">
+                    <li>Align dimensions from the right.</li>
+                    <li>A dimension is compatible if they are equal OR one of them is 1.</li>
+                </ol>
+                <div class="equation-box">$$ A_{ij} + b_j \implies A_{ij} + \text{copy}(b_j) $$</div>
+            </div>
+
+            <div class="card">
+                <h2>III. Einstein Summation (einsum)</h2>
+                <p>The "Swiss Army Knife" of tensor operations. Define any operation by labeling indices.</p>
+                <div class="grid-2">
+                    <div>
+                        <h4>Matrix Multiplication</h4>
+                        <div class="equation-box">$$ C_{ik} = \sum_j A_{ij} B_{jk} $$</div>
+                        <p>Code: <code>einsum('ij,jk->ik', A, B)</code></p>
+                    </div>
+                    <div>
+                        <h4>Batch Matrix Multiplication</h4>
+                        <div class="equation-box">$$ C_{bij} = \sum_k A_{bik} B_{bkj} $$</div>
+                        <p>Code: <code>einsum('bik,bkj->bij', A, B)</code></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: MATH - OPTIMIZATION -->
+        <section id="math-optimization" class="section">
+            <header>
+                <h1>Optimization: Navigating the Landscape</h1>
+                <p>How do we find the bottom of a high-dimensional valley? The evolution of gradient descent.</p>
+            </header>
+
+            <div class="card">
+                <h2>I. Stochastic Gradient Descent (SGD)</h2>
+                <p>The simplest approach: move in the direction opposite to the gradient.</p>
+                <div class="equation-box">$$ \theta_{t+1} = \theta_t - \eta \nabla L(\theta_t) $$</div>
+                <p><strong>The Problem:</strong> If the loss surface is a "narrow ravine," SGD oscillates wildly across the steep sides while making slow progress toward the minima.</p>
+            </div>
+
+            <div class="card">
+                <h2>II. Momentum: Adding Inertia</h2>
+                <p>Inspired by physics. We accumulate a "velocity" $v$ to dampen oscillations and accelerate in consistent directions.</p>
+                <div class="equation-box">
+                    $$ v_{t+1} = \gamma v_t + \eta \nabla L(\theta_t) $$
+                    $$ \theta_{t+1} = \theta_t - v_{t+1} $$
+                </div>
+                <p><strong>Intuition:</strong> A heavy ball rolling down a hill. It gains speed in the direction of the long-term trend and ignores small bumps.</p>
+            </div>
+
+            <div class="card">
+                <h2>III. Adaptive Methods (RMSProp & Adam)</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>RMSProp</h3>
+                        <p>Normalizes the gradient by a running average of its magnitude. Prevents gradients from exploding or vanishing in specific dimensions.</p>
+                        <div class="equation-box">$$ E[g^2]_t = 0.9 E[g^2]_{t-1} + 0.1 g_t^2 $$</div>
+                    </div>
+                    <div>
+                        <h3>Adam (The Standard)</h3>
+                        <p>Combines <strong>Momentum</strong> (mean) and <strong>RMSProp</strong> (variance).</p>
+                        <div class="equation-box">$$ \theta_{t+1} = \theta_t - \frac{\eta \cdot \text{m}_t}{\sqrt{\text{v}_t} + \epsilon} $$</div>
+                    </div>
+                </div>
+                <div class="math-stepper" style="margin-top: 1rem;">
+                    <div class="math-step active">
+                        <h4>Deep Intuition: Why Adam is the "King"</h4>
+                        <p>Adam effectively gives <strong>every single weight</strong> its own personalized learning rate. Weights that have sparse or noisy gradients get their updates boosted, while weights in steep ravines get their updates dampened for stability.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: ARCHITECTURE LAB -->
+        <section id="architecture-lab" class="section">
+            <header>
+                <h1>Architecture Lab: The Model Zoo</h1>
+                <p>Mathematical derivations and first principles behind neural architectures.</p>
+            </header>
+
+            <div class="grid-2">
+                <div class="card" style="grid-column: span 2;">
+                    <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;">
+                        <button class="btn btn-outline" onclick="showArch('neuron')">Single Neuron</button>
+                        <button class="btn btn-outline" onclick="showArch('mlp')">MLP</button>
+                        <button class="btn btn-outline" onclick="showArch('cnn')">CNN</button>
+                        <button class="btn btn-outline" onclick="showArch('rnn')">RNN/LSTM</button>
+                        <button class="btn btn-outline" onclick="showArch('transformer')">Transformer</button>
+                        <button class="btn btn-outline" onclick="showArch('bayesian')">Bayesian</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fa-solid fa-diagram-project"></i> Architecture View</h3>
+                    <div id="arch-diagram" style="height: 300px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                        <p>Select an architecture to visualize</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fa-solid fa-square-root-variable"></i> The "Why" (Loss Derivation)</h3>
+                    <div id="arch-math" class="math-stepper">
+                        <p>Select an architecture to see its first-principles derivation.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1026,11 +1378,209 @@
             
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if (el) el.classList.add('active');
+
+            // Trigger MathJax re-render for the newly shown section
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        // --- NEW: UI HELPERS FOR FOUNDATIONS & ARCH ---
+        function showMathTab(tabId, el) {
+            document.querySelectorAll('.math-tab-content').forEach(c => c.style.display = 'none');
+            document.getElementById(tabId).style.display = 'block';
+            
+            // Handle active state for the tab buttons
+            const parent = el.parentElement;
+            parent.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        // --- ARCHITECTURE DATA ---
+        const archData = {
+            'neuron': {
+                diagram: '<div style="text-align:center"><i class="fa-solid fa-circle" style="font-size:3rem; color:var(--primary)"></i><p>Input ($x$) &rarr; Weighted Sum ($z$) &rarr; Activation ($\sigma$) &rarr; Output ($y$)</p></div>',
+                math: `
+                    <h4>1. The Probabilistic Model</h4>
+                    <p>We treat classification as predicting the probability $P(y=1|x)$. We model this with the Bernoulli distribution:</p>
+                    <div class="equation-box">$$ P(y|x) = \hat{y}^y (1-\hat{y})^{1-y} $$</div>
+                    
+                    <h4>2. Maximum Likelihood Estimation</h4>
+                    <p>We want to find weights $W$ that maximize the likelihood over the dataset $\prod P(y_i|x_i)$.</p>
+                    
+                    <h4>3. Deriving the Loss</h4>
+                    <p>Taking the negative logarithm ($-\log \mathcal{L}$) converts the product to a sum and gives us <strong>Binary Cross-Entropy</strong>:</p>
+                    <div class="equation-box">$$ \mathcal{L}(\theta) = -\sum [y \log(\hat{y}) + (1-y) \log(1-\hat{y})] $$</div>
+                    <p>This is why we use BCE, not MSE. MSE assumes a Gaussian distribution, which is incorrect for binary 0/1 classes.</p>
+                `
+            },
+            'mlp': {
+                diagram: '<div style="text-align:center"><i class="fa-solid fa-network-wired" style="font-size:3rem; color:var(--accent)"></i><p>Input &rarr; Hidden Layers &rarr; Softmax Output</p></div>',
+                math: `
+                    <h4>1. Universal Approximation</h4>
+                    <p>An MLP with one hidden layer can approximate any continuous function, given enough neurons.</p>
+                    
+                    <h4>2. Multi-Class: The Categorical Distribution</h4>
+                    <p>For $K$ classes, we generalize Bernoulli to the Categorical distribution using the <strong>Softmax</strong> function to normalize logits into probabilities.</p>
+                    <div class="equation-box">$$ \hat{y}_k = \frac{e^{z_k}}{\sum e^{z_j}} $$</div>
+
+                    <h4>3. Cross-Entropy Loss</h4>
+                    <p>Minimizing the KL-Divergence between the true distribution (one-hot) and predicted distribution yields:</p>
+                    <div class="equation-box">$$ \mathcal{L} = -\sum_{k=1}^K y_k \log(\hat{y}_k) $$</div>
+                `
+            },
+            'cnn': {
+                diagram: '<div style="text-align:center"><i class="fa-solid fa-layer-group" style="font-size:3rem; color:var(--warning)"></i><p>Filters sliding over Input (Spatial)</p></div>',
+                math: `
+                    <h4>1. The Prior: Spatial Invariance</h4>
+                    <p>We assume that a feature (e.g., an edge) is useful regardless of where it appears in the image. This implies <strong>Weight Sharing</strong>.</p>
+                    
+                    <h4>2. Convolution as Sparsity</h4>
+                    <p>A convolution is mathematically equivalent to a matrix multiplication where the weight matrix is <strong>Toeplitz</strong> (diagonal-constant) and extremely sparse.</p>
+                    <div class="equation-box">$$ (f * g)[n] = \sum_{m=-M}^M f[n-m]g[m] $$</div>
+                    <p>This "Hard Constraint" acts as a powerful regularizer, forcing the model to learn local, translation-invariant features.</p>
+                `
+            },
+            'rnn': {
+                diagram: '<div style="text-align:center"><i class="fa-solid fa-arrow-rotate-right" style="font-size:3rem; color:var(--benign)"></i><p>Hidden state $h_t$ feeds into $h_{t+1}$</p></div>',
+                math: `
+                    <h4>1. Backpropagation Through Time (BPTT)</h4>
+                    <p>The gradient depends on the product of matrices over time:</p>
+                    <div class="equation-box">$$ \frac{\partial L}{\partial h_0} = \frac{\partial L}{\partial h_T} \prod_{t=1}^T \frac{\partial h_t}{\partial h_{t-1}} $$</div>
+                    
+                    <h4>2. The Vanishing Gradient Problem</h4>
+                    <p>If the singular values of the recurrent weight matrix $|W| < 1$, the product decays exponentially to zero. If $|W| > 1$, it explodes.</p>
+                    
+                    <h4>3. The LSTM Solution</h4>
+                    <p>LSTMs introduce an <strong>Additive Update</strong> path for the cell state:</p>
+                    <div class="equation-box">$$ C_t = f_t C_{t-1} + i_t \tilde{C}_t $$</div>
+                    <p>The derivative $\frac{\partial C_t}{\partial C_{t-1}}$ contains a term $1$, creating a "gradient superhighway" that prevents vanishing.</p>
+                `
+            },
+            'bayesian': {
+                diagram: '<div style="text-align:center"><i class="fa-solid fa-dice" style="font-size:3rem; color:#fff"></i><p>Weights are Distributions $P(\theta)$</p></div>',
+                math: `
+                    <h4>1. Weights as Random Variables</h4>
+                    <p>Instead of a single number, each weight is a Gaussian distribution $\theta \\sim \\mathcal{N}(\mu, \sigma)$. We want to find the posterior $P(\theta|\\mathcal{D})$.</p>
+                    
+                    <h4>2. The Objective: ELBO</h4>
+                    <p>Calculating the true posterior is intractable. We approximate it using Variational Inference by minimizing the <strong>Evidence Lower Bound (ELBO)</strong>:</p>
+                    <div class="equation-box">$$ \\mathcal{L} = \\mathbb{E}[\\log P(\\mathcal{D}|\\theta)] - D_{KL}(Q(\\theta)||P(\\theta)) $$</div>
+                    <p><strong>Term 1 (Likelihood):</strong> Fit the data well.</p>
+                    <p><strong>Term 2 (Complexity):</strong> Stay close to the prior (regularization).</p>
+                `
+            },
+            'transformer': {
+                diagram: '<div style="text-align:center"><i class="fa-solid fa-arrows-to-circle" style="font-size:3rem; color:var(--accent)"></i><p>Multi-Head Attention & Feed-Forward Blocks</p></div>',
+                math: `
+                    <h4>1. The Attention Mechanism</h4>
+                    <p>Unlike RNNs, Transformers process all tokens in parallel. They determine which tokens are relevant to each other using Queries ($Q$), Keys ($K$), and Values ($V$).</p>
+                    <div class="equation-box">$$ \\text{Attention}(Q, K, V) = \\text{softmax}\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right)V $$</div>
+                    
+                    <h4>2. Multi-Head Attention</h4>
+                    <p>The model performs this "Self-Attention" multiple times in parallel to capture different types of relationships (e.g., grammar vs. meaning).</p>
+                    
+                    <h4>3. Quadratic Complexity</h4>
+                    <p>Since every token attends to every other token, the cost is $O(N^2)$ where $N$ is sequence length. This is why long context windows are computationally expensive.</p>
+                `
+            }
+        };
+
+        function showArch(archId) {
+            const data = archData[archId];
+            if (!data) return;
+
+            document.getElementById('arch-diagram').innerHTML = data.diagram;
+            document.getElementById('arch-math').innerHTML = data.math;
+            if(window.MathJax) MathJax.typesetPromise();
+        }
+
+        // --- NEW: MATRIX VIZ ---
+        function updateMatrixViz() {
+            const a = parseFloat(document.getElementById('slider-ma').value);
+            const b = parseFloat(document.getElementById('slider-mb').value);
+            const c = parseFloat(document.getElementById('slider-mc').value);
+            const d = parseFloat(document.getElementById('slider-md').value);
+
+            document.getElementById('val-ma').innerText = a.toFixed(1);
+            document.getElementById('val-mb').innerText = b.toFixed(1);
+            document.getElementById('val-mc').innerText = c.toFixed(1);
+            document.getElementById('val-md').innerText = d.toFixed(1);
+
+            const canvas = document.getElementById('matrixCanvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+            const center = w / 2;
+            const scale = 40;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Draw original grid (faint)
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 1;
+            for(let i = -5; i <= 5; i++) {
+                ctx.beginPath();
+                ctx.moveTo(center + i*scale, 0); ctx.lineTo(center + i*scale, h);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(0, center + i*scale); ctx.lineTo(w, center + i*scale);
+                ctx.stroke();
+            }
+
+            // Draw transformed grid
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            for(let i = -5; i <= 5; i++) {
+                // Vertical lines (transformed)
+                // (i, -5) to (i, 5)
+                let x1 = a*i + b*(-5); let y1 = c*i + d*(-5);
+                let x2 = a*i + b*(5); let y2 = c*i + d*(5);
+                ctx.beginPath();
+                ctx.moveTo(center + x1*scale, center - y1*scale);
+                ctx.lineTo(center + x2*scale, center - y2*scale);
+                ctx.stroke();
+
+                // Horizontal lines (transformed)
+                // (-5, i) to (5, i)
+                x1 = a*(-5) + b*i; y1 = c*(-5) + d*i;
+                x2 = a*(5) + b*i; y2 = c*(5) + d*i;
+                ctx.beginPath();
+                ctx.moveTo(center + x1*scale, center - y1*scale);
+                ctx.lineTo(center + x2*scale, center - y2*scale);
+                ctx.stroke();
+            }
+
+            // Basis vectors
+            ctx.lineWidth = 3;
+            // Vector i (1,0) -> (a, c)
+            ctx.strokeStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.moveTo(center, center);
+            ctx.lineTo(center + a*scale, center - c*scale);
+            ctx.stroke();
+
+            // Vector j (0,1) -> (b, d)
+            ctx.strokeStyle = '#10b981';
+            ctx.beginPath();
+            ctx.moveTo(center, center);
+            ctx.lineTo(center + b*scale, center - d*scale);
+            ctx.stroke();
+
+            // Analysis
+            const det = a*d - b*c;
+            const desc = document.getElementById('matrix-desc');
+            if(Math.abs(det) < 0.01) desc.innerText = "Determinant ≈ 0: Dimension Collapse!";
+            else if(a === 1 && b === 0 && c === 0 && d === 1) desc.innerText = "Identity Matrix: No change.";
+            else if(a === d && b === -c && Math.abs(a*a + b*b - 1) < 0.01) desc.innerText = "Rotation Matrix.";
+            else desc.innerText = `Determinant: ${det.toFixed(2)}`;
         }
 
         window.onload = function() {
             updateLab();
             initScenarios();
+            updateMatrixViz();
         };
 
     </script>
