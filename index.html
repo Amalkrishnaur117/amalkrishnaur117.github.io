@@ -346,6 +346,23 @@
                     </div>
                 </div>
             </div>
+
+            <div class="card">
+                <h2>VII. Function Approximation & PCA</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>Function Approximation</h3>
+                        <p>A neural network is a function approximator. We use a basis (like Fourier or polynomial) to approximate any complex function.</p>
+                        <div class="equation-box">$$ f(x) \approx \sum c_i \phi_i(x) $$</div>
+                        <p>The network learns the coefficients $c_i$.</p>
+                    </div>
+                    <div>
+                        <h3>PCA Visualization</h3>
+                        <p>Principal Component Analysis finds the most important axes of variation in the data. The eigenvectors of the covariance matrix.</p>
+                        <p>This is a powerful dimensionality reduction technique.</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- SECTION: MATH - CALCULUS -->
@@ -486,6 +503,31 @@
                         <p>Summing voxels to find the mass or volume of a 3D shape.</p>
                         <div class="equation-box">$$ \iiint_V f(x,y,z) dV $$</div>
                         <p><strong>DL Context:</strong> Probability normalization (ensuring $\int P(x)dx = 1$) over high-dimensional spaces.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>VIII. Vector Calculus II: Theorems & Integrals</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>Line Integrals ($\int_C \vec{F} \cdot d\vec{r}$)</h3>
+                        <p>Measures "Work" done by a Vector Field $\vec{F}$ along a path $C$.</p>
+                        <div class="equation-box">$$ W = \int_a^b \vec{F}(r(t)) \cdot r'(t) dt $$</div>
+                    </div>
+                    <div>
+                        <h3>Surface Integrals ($\iint_S \vec{F} \cdot d\vec{S}$)</h3>
+                        <p>Measures "Flux" of a field $\vec{F}$ through a surface $S$.</p>
+                    </div>
+                </div>
+                <div class="math-stepper">
+                    <div class="math-step active">
+                        <h4>Fundamental Theorems</h4>
+                        <ul>
+                            <li><strong>Green's Theorem:</strong> Relates circulation on a 2D boundary to the Curl inside.</li>
+                            <li><strong>Stokes' Theorem:</strong> Relates circulation on a 3D boundary to the Curl through the surface.</li>
+                            <li><strong>Divergence Theorem:</strong> Relates flux through a 3D boundary to the Divergence in the volume.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
