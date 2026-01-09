@@ -446,11 +446,31 @@
             </div>
 
             <div class="card">
-                <h2>III. Approximations & Expansions</h2>
-                <h3>Taylor Series Expansion</h3>
-                <p>We can approximate any smooth function near a point $x_0$ using polynomials.</p>
-                <div class="equation-box">$$ f(x) \approx f(x_0) + \nabla f(x_0)^T (x-x_0) + \frac{1}{2}(x-x_0)^T H(x-x_0) $$</div>
-                <p><strong>Gradient Descent</strong> is basically a first-order Taylor approximation. <strong>Newton's Method</strong> uses the second-order (Hessian).</p>
+                <h2>IV. Interactive Gradient Lab</h2>
+                <p>Find the minima of the non-convex function $f(x) = x^2 + 3\sin(2x)$.</p>
+                
+                <div class="grid-2">
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; min-height: 300px;">
+                        <canvas id="gradCanvas" width="400" height="300"></canvas>
+                    </div>
+                    <div>
+                        <div class="control-group">
+                            <div class="control-header"><span>Learning Rate ($\eta$)</span><span id="val-lr">0.1</span></div>
+                            <input type="range" min="0.01" max="1.0" step="0.01" value="0.1" id="slider-lr" oninput="drawGradViz()">
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; margin-bottom: 1rem;">
+                            <button class="btn btn-primary" onclick="stepGradient()">Take 1 Step</button>
+                            <button class="btn btn-outline" onclick="resetGradient()">Reset</button>
+                        </div>
+
+                        <div style="background: var(--bg-dark); padding: 1rem; border-radius: 6px; font-family: monospace; font-size: 0.9rem;">
+                            <div>Position ($x$): <span id="grad-x" style="color:var(--primary)">2.00</span></div>
+                            <div>Gradient ($f'(x)$): <span id="grad-g" style="color:var(--warning)">--</span></div>
+                            <div>Update ($-\eta \cdot g$): <span id="grad-u" style="color:var(--benign)">--</span></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -503,6 +523,32 @@
                         <h3>KL Divergence ($D_{KL}$)</h3>
                         <p>The "distance" between two probability distributions $P$ (True) and $Q$ (Predicted).</p>
                         <div class="equation-box">$$ D_{KL}(P || Q) = \sum P(x) \log \frac{P(x)}{Q(x)} $$</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>IV. Interactive Likelihood Lab</h2>
+                <p>Maximize the likelihood of the Gaussian model fitting the data points (blue bars).</p>
+                <div class="grid-2">
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; min-height: 300px;">
+                        <canvas id="probCanvas" width="400" height="300"></canvas>
+                    </div>
+                    <div>
+                        <div class="control-group">
+                            <div class="control-header"><span>Mean ($\mu$)</span><span id="val-mu">0.0</span></div>
+                            <input type="range" min="-3" max="3" step="0.1" value="0" id="slider-mu" oninput="drawProbViz()">
+                        </div>
+                        <div class="control-group">
+                            <div class="control-header"><span>Std Dev ($\sigma$)</span><span id="val-sigma">1.0</span></div>
+                            <input type="range" min="0.1" max="2.0" step="0.1" value="1.0" id="slider-sigma" oninput="drawProbViz()">
+                        </div>
+
+                        <div style="background: var(--bg-dark); padding: 1rem; border-radius: 6px; font-family: monospace; font-size: 0.9rem; margin-top: 1rem;">
+                            <div>Log-Likelihood ($\sum \log P$):</div>
+                            <div id="val-ll" style="font-size: 1.5rem; font-weight: bold; color: var(--text-muted)">-100.00</div>
+                            <div id="ll-feedback" style="font-size: 0.8rem; margin-top: 5px;">Adjust $\mu$ and $\sigma$ to maximize this.</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1399,19 +1445,43 @@
         // --- ARCHITECTURE DATA ---
         const archData = {
             'neuron': {
-                diagram: '<div style="text-align:center"><i class="fa-solid fa-circle" style="font-size:3rem; color:var(--primary)"></i><p>Input ($x$) &rarr; Weighted Sum ($z$) &rarr; Activation ($\sigma$) &rarr; Output ($y$)</p></div>',
+                diagram: `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%;">
+                        <div>
+                            <div style="text-align:center; margin-bottom: 1rem;"><i class="fa-solid fa-circle" style="font-size:3rem; color:var(--primary)"></i><p>Single Neuron Decision Boundary</p></div>
+                            <div style="background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; height: 250px;">
+                                <canvas id="neuronCanvas" width="250" height="250"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>Controls</h4>
+                            <div class="control-group">
+                                <div class="control-header"><span>Weight 1 ($w_1$)</span><span id="val-w1">1.0</span></div>
+                                <input type="range" min="-5" max="5" step="0.1" value="1" id="slider-w1" oninput="drawNeuronViz()">
+                            </div>
+                            <div class="control-group">
+                                <div class="control-header"><span>Weight 2 ($w_2$)</span><span id="val-w2">1.0</span></div>
+                                <input type="range" min="-5" max="5" step="0.1" value="1" id="slider-w2" oninput="drawNeuronViz()">
+                            </div>
+                            <div class="control-group">
+                                <div class="control-header"><span>Bias ($b$)</span><span id="val-b">0.0</span></div>
+                                <input type="range" min="-5" max="5" step="0.1" value="0" id="slider-b" oninput="drawNeuronViz()">
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--text-muted)">Boundary: $w_1 x_1 + w_2 x_2 + b = 0$</p>
+                        </div>
+                    </div>
+                `,
                 math: `
                     <h4>1. The Probabilistic Model</h4>
                     <p>We treat classification as predicting the probability $P(y=1|x)$. We model this with the Bernoulli distribution:</p>
-                    <div class="equation-box">$$ P(y|x) = \hat{y}^y (1-\hat{y})^{1-y} $$</div>
+                    <div class="equation-box">$$ P(y|x) = \\hat{y}^y (1-\\hat{y})^{1-y} $$</div>
                     
                     <h4>2. Maximum Likelihood Estimation</h4>
-                    <p>We want to find weights $W$ that maximize the likelihood over the dataset $\prod P(y_i|x_i)$.</p>
+                    <p>We want to find weights $W$ that maximize the likelihood over the dataset $\\prod P(y_i|x_i)$.</p>
                     
                     <h4>3. Deriving the Loss</h4>
-                    <p>Taking the negative logarithm ($-\log \mathcal{L}$) converts the product to a sum and gives us <strong>Binary Cross-Entropy</strong>:</p>
-                    <div class="equation-box">$$ \mathcal{L}(\theta) = -\sum [y \log(\hat{y}) + (1-y) \log(1-\hat{y})] $$</div>
-                    <p>This is why we use BCE, not MSE. MSE assumes a Gaussian distribution, which is incorrect for binary 0/1 classes.</p>
+                    <p>Taking the negative logarithm ($-\\log \\mathcal{L}$) converts the product to a sum and gives us <strong>Binary Cross-Entropy</strong>:</p>
+                    <div class="equation-box">$$ \\mathcal{L}(\\theta) = -\\sum [y \\log(\\hat{y}) + (1-y) \\log(1-\\hat{y})] $$</div>
                 `
             },
             'mlp': {
@@ -1486,6 +1556,93 @@
             }
         };
 
+        // --- NEW: NEURON VIZ ---
+        function drawNeuronViz() {
+            const canvas = document.getElementById('neuronCanvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+
+            const w1 = parseFloat(document.getElementById('slider-w1').value);
+            const w2 = parseFloat(document.getElementById('slider-w2').value);
+            const b = parseFloat(document.getElementById('slider-b').value);
+
+            document.getElementById('val-w1').innerText = w1.toFixed(1);
+            document.getElementById('val-w2').innerText = w2.toFixed(1);
+            document.getElementById('val-b').innerText = b.toFixed(1);
+
+            // Coordinate System: [-2, 3]
+            const mapX = (x) => (x + 2) / 5 * w;
+            const mapY = (y) => h - (y + 2) / 5 * h;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // 1. Draw Decision Background (Sigmoid)
+            const imgData = ctx.createImageData(w, h);
+            for (let py = 0; py < h; py++) {
+                for (let px = 0; px < w; px++) {
+                    const x1 = (px / w) * 5 - 2;
+                    const x2 = ((h - py) / h) * 5 - 2;
+                    const z = w1*x1 + w2*x2 + b;
+                    const sigmoid = 1 / (1 + Math.exp(-z));
+                    
+                    const idx = (py * w + px) * 4;
+                    // Blue (Pos) vs Red (Neg)
+                    imgData.data[idx] = 59;     // R
+                    imgData.data[idx + 1] = 130; // G
+                    imgData.data[idx + 2] = 246; // B
+                    imgData.data[idx + 3] = sigmoid * 100; // Alpha based on confidence
+                    
+                    if (sigmoid < 0.5) {
+                        imgData.data[idx] = 239; // R
+                        imgData.data[idx+1] = 68;
+                        imgData.data[idx+2] = 68;
+                        imgData.data[idx+3] = (1-sigmoid) * 100;
+                    }
+                }
+            }
+            ctx.putImageData(imgData, 0, 0);
+
+            // 2. Draw Data Points (AND Gate Logic for example)
+            // (0,0)->0, (0,1)->0, (1,0)->0, (1,1)->1
+            const points = [
+                {x:0, y:0, l:0}, {x:0, y:1, l:0}, {x:1, y:0, l:0}, {x:1, y:1, l:1}
+            ];
+
+            points.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(mapX(p.x), mapY(p.y), 8, 0, Math.PI*2);
+                ctx.fillStyle = p.l === 1 ? '#3b82f6' : '#ef4444';
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                ctx.fill();
+                ctx.stroke();
+            });
+
+            // 3. Draw Decision Boundary Line: w1*x1 + w2*x2 + b = 0 => x2 = -(w1*x1 + b)/w2
+            ctx.beginPath();
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2;
+            
+            // Draw segment across view
+            const drawLine = (x_start, x_end) => {
+                if (Math.abs(w2) < 0.01) {
+                    // Vertical line x1 = -b/w1
+                    const x_vert = -b/w1;
+                    ctx.moveTo(mapX(x_vert), 0);
+                    ctx.lineTo(mapX(x_vert), h);
+                } else {
+                    const y_start = -(w1*x_start + b)/w2;
+                    const y_end = -(w1*x_end + b)/w2;
+                    ctx.moveTo(mapX(x_start), mapY(y_start));
+                    ctx.lineTo(mapX(x_end), mapY(y_end));
+                }
+            };
+            drawLine(-2, 3);
+            ctx.stroke();
+        }
+
         function showArch(archId) {
             const data = archData[archId];
             if (!data) return;
@@ -1493,6 +1650,11 @@
             document.getElementById('arch-diagram').innerHTML = data.diagram;
             document.getElementById('arch-math').innerHTML = data.math;
             if(window.MathJax) MathJax.typesetPromise();
+            
+            // Trigger specific viz if needed
+            if(archId === 'neuron') {
+                setTimeout(drawNeuronViz, 50); // Small delay for DOM to render
+            }
         }
 
         // --- NEW: MATRIX VIZ ---
@@ -1577,10 +1739,166 @@
             else desc.innerText = `Determinant: ${det.toFixed(2)}`;
         }
 
+        // --- NEW: GRADIENT DESCENT VIZ ---
+        let gradState = { x: 2.0, trace: [] };
+
+        function drawGradViz() {
+            const canvas = document.getElementById('gradCanvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+            
+            // Coordinate system: X from -3 to 3, Y from -2 to 10
+            const mapX = (x) => (x + 3) / 6 * w;
+            const mapY = (y) => h - (y + 2) / 12 * h;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // 1. Draw Function f(x) = x^2 + 3sin(2x)
+            ctx.beginPath();
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            for(let px = 0; px <= w; px++) {
+                const x = (px / w) * 6 - 3;
+                const y = x*x + 3*Math.sin(2*x);
+                if (px===0) ctx.moveTo(px, mapY(y));
+                else ctx.lineTo(px, mapY(y));
+            }
+            ctx.stroke();
+
+            // 2. Draw Current Point
+            const cx = gradState.x;
+            const cy = cx*cx + 3*Math.sin(2*cx);
+            
+            ctx.beginPath();
+            ctx.fillStyle = '#ef4444';
+            ctx.arc(mapX(cx), mapY(cy), 6, 0, Math.PI*2);
+            ctx.fill();
+
+            // 3. Draw Tangent Line (Gradient)
+            const deriv = 2*cx + 6*Math.cos(2*cx); // f'(x) = 2x + 6cos(2x)
+            const tangentLen = 1.0;
+            // Point (x,y) to (x+dx, y+dy) where dy/dx = deriv
+            const x1 = cx - tangentLen;
+            const y1 = cy - deriv * tangentLen;
+            const x2 = cx + tangentLen;
+            const y2 = cy + deriv * tangentLen;
+            
+            ctx.beginPath();
+            ctx.strokeStyle = '#f59e0b'; // Warning color for slope
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 5]);
+            ctx.moveTo(mapX(x1), mapY(y1));
+            ctx.lineTo(mapX(x2), mapY(y2));
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // UI Updates
+            const lr = parseFloat(document.getElementById('slider-lr').value);
+            document.getElementById('val-lr').innerText = lr.toFixed(2);
+            document.getElementById('grad-x').innerText = cx.toFixed(3);
+            document.getElementById('grad-g').innerText = deriv.toFixed(3);
+            document.getElementById('grad-u').innerText = (-lr * deriv).toFixed(3);
+        }
+
+        function stepGradient() {
+            const lr = parseFloat(document.getElementById('slider-lr').value);
+            const cx = gradState.x;
+            const deriv = 2*cx + 6*Math.cos(2*cx);
+            gradState.x = cx - lr * deriv;
+            
+            // Constrain to view
+            if(gradState.x > 3) gradState.x = 3;
+            if(gradState.x < -3) gradState.x = -3;
+            
+            drawGradViz();
+        }
+
+        // --- NEW: PROBABILITY VIZ ---
+        const probData = [-1.5, -0.8, -0.2, 0.1, 0.3, 0.5, 1.2, 1.8]; // Fixed "Toy" Dataset
+
+        function drawProbViz() {
+            const canvas = document.getElementById('probCanvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+
+            const mu = parseFloat(document.getElementById('slider-mu').value);
+            const sigma = parseFloat(document.getElementById('slider-sigma').value);
+
+            // Mapping: X [-4, 4] -> [0, w], Y [0, 0.5] -> [h, 0]
+            const mapX = (x) => (x + 4) / 8 * w;
+            const mapY = (y) => h - (y / 0.5) * h;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // 1. Draw Data Points (Histogram-ish)
+            ctx.fillStyle = 'rgba(59, 130, 246, 0.5)'; // Blue
+            probData.forEach(x => {
+                const px = mapX(x);
+                ctx.fillRect(px - 2, mapY(0.05), 4, mapY(0) - mapY(0.05));
+            });
+
+            // 2. Draw Gaussian Curve (Model)
+            ctx.beginPath();
+            ctx.strokeStyle = '#ef4444'; // Red
+            ctx.lineWidth = 2;
+            const gaussian = (x, m, s) => (1 / (s * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - m) / s, 2));
+
+            for (let px = 0; px <= w; px++) {
+                const x = (px / w) * 8 - 4;
+                const y = gaussian(x, mu, sigma);
+                if (px === 0) ctx.moveTo(px, mapY(y));
+                else ctx.lineTo(px, mapY(y));
+            }
+            ctx.stroke();
+
+            // 3. Calculate Log-Likelihood
+            let ll = 0;
+            probData.forEach(x => {
+                const prob = gaussian(x, mu, sigma);
+                // Avoid log(0)
+                ll += Math.log(Math.max(prob, 1e-10));
+                
+                // Draw "height" lines for each point
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.moveTo(mapX(x), mapY(0));
+                ctx.lineTo(mapX(x), mapY(prob));
+                ctx.stroke();
+            });
+
+            // UI Updates
+            document.getElementById('val-mu').innerText = mu.toFixed(1);
+            document.getElementById('val-sigma').innerText = sigma.toFixed(1);
+            
+            const llBox = document.getElementById('val-ll');
+            llBox.innerText = ll.toFixed(2);
+            
+            const feedback = document.getElementById('ll-feedback');
+            // True parameters roughly mean=0.2, sigma=1.0 for the toy data
+            if (ll > -10.5) {
+                 llBox.style.color = 'var(--benign)';
+                 feedback.innerText = "Excellent fit! High likelihood.";
+            } else {
+                 llBox.style.color = 'var(--text-muted)';
+                 feedback.innerText = "Adjust parameters to fit the blue bars.";
+            }
+        }
+
+        function resetGradient() {
+            gradState.x = 2.0; // Start back at the right hill
+            drawGradViz();
+        }
+
         window.onload = function() {
             updateLab();
             initScenarios();
             updateMatrixViz();
+            drawGradViz();
+            drawProbViz();
         };
 
     </script>
