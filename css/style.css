@@ -1,0 +1,105 @@
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-sidebar: #020617;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --benign: #10b981; /* Green */
+            --attack: #ef4444; /* Red */
+            --primary: #3b82f6; /* Blue */
+            --warning: #f59e0b;
+            --border: #334155;
+            --accent: #8b5cf6; /* Purple for Hypothesis */
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+
+        body { background-color: var(--bg-dark); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+
+        /* Sidebar */
+        .sidebar { width: 260px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 1.5rem; flex-shrink: 0; }
+        .brand { font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-bottom: 2rem; display: flex; align-items: center; gap: 10px; }
+        .nav-item { padding: 0.75rem 1rem; color: var(--text-muted); cursor: pointer; border-radius: 6px; margin-bottom: 0.5rem; transition: all 0.2s; display: flex; align-items: center; gap: 10px; }
+        .nav-item:hover { background-color: rgba(255,255,255,0.05); color: var(--text-main); }
+        .nav-item.active { background-color: var(--primary); color: white; }
+        .progress-container { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border); }
+        .progress-bar { height: 6px; background: var(--bg-card); border-radius: 3px; overflow: hidden; margin-top: 5px; }
+        .progress-fill { height: 100%; background: var(--benign); width: 0%; transition: width 0.5s; }
+
+        /* Main Content */
+        .main-content { flex: 1; overflow-y: auto; padding: 2rem; scroll-behavior: smooth; }
+        .section { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        h2 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--text-main); border-left: 4px solid var(--primary); padding-left: 1rem; }
+        h3 { font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--text-muted); }
+        p { color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem; }
+
+        /* Cards & Grid */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+        .card { background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        
+        /* Interactive Controls */
+        .control-group { margin-bottom: 1.25rem; }
+        .control-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; }
+        input[type="range"] { width: 100%; cursor: pointer; accent-color: var(--primary); }
+        .toggle-switch { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .toggle-checkbox { width: 40px; height: 20px; background: var(--border); border-radius: 20px; position: relative; transition: 0.3s; }
+        .toggle-checkbox::after { content: ''; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: 0.3s; }
+        input[type="checkbox"]:checked + .toggle-checkbox { background: var(--primary); }
+        input[type="checkbox"]:checked + .toggle-checkbox::after { transform: translateX(20px); }
+        
+        /* Math Stepper & Boxes */
+        .math-stepper { background: rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
+        .math-step { padding: 1rem; border-bottom: 1px solid var(--border); cursor: default; }
+        .math-step.active { background: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--primary); }
+        .equation-box { font-family: 'Times New Roman', serif; font-size: 1.1rem; padding: 0.5rem; background: var(--bg-dark); border-radius: 4px; margin: 0.5rem 0; text-align: center; }
+        .substitution { color: var(--warning); font-weight: bold; }
+
+        /* Scenario Styling */
+        .scenario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .scenario-card { cursor: pointer; transition: transform 0.2s; position: relative; overflow: hidden; }
+        .scenario-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .difficulty { position: absolute; top: 1rem; right: 1rem; font-size: 0.8rem; padding: 2px 8px; border-radius: 12px; background: rgba(0,0,0,0.3); }
+        .difficulty.easy { color: var(--benign); border: 1px solid var(--benign); }
+        .difficulty.medium { color: var(--warning); border: 1px solid var(--warning); }
+        .difficulty.hard { color: var(--attack); border: 1px solid var(--attack); }
+        
+        /* Workflow Steps */
+        .workflow-step { margin-bottom: 2rem; border-left: 2px solid var(--border); padding-left: 1.5rem; position: relative; opacity: 0.5; transition: 0.3s; pointer-events: none; }
+        .workflow-step.active { opacity: 1; border-color: var(--primary); pointer-events: all; }
+        .workflow-step.completed { opacity: 1; border-color: var(--benign); pointer-events: all; }
+        .step-badge { position: absolute; left: -12px; top: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--bg-card); border: 2px solid var(--border); color: var(--text-muted); font-size: 0.8rem; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .workflow-step.active .step-badge { border-color: var(--primary); background: var(--primary); color: white; }
+        .workflow-step.completed .step-badge { border-color: var(--benign); background: var(--benign); color: var(--bg-dark); }
+
+        /* Hypothesis Box */
+        .hypothesis-opt { padding: 10px; border: 1px solid var(--border); margin-bottom: 5px; cursor: pointer; border-radius: 4px; transition: 0.2s; }
+        .hypothesis-opt:hover { background: rgba(255,255,255,0.05); }
+        .hypothesis-opt.selected { background: rgba(139, 92, 246, 0.2); border-color: var(--accent); color: white; }
+
+        /* Deep Math Panel */
+        .deep-math-panel { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-top: 1rem; display: none; border-left: 4px solid var(--accent); }
+        
+        /* Buttons */
+        .btn { padding: 0.6rem 1.2rem; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: #2563eb; }
+        .btn-accent { background: var(--accent); color: white; }
+        .btn-accent:hover { background: #7c3aed; }
+        .btn-success { background: var(--benign); color: var(--bg-dark); }
+        .btn-danger { background: var(--attack); color: white; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-muted); }
+        .btn-outline:hover { border-color: var(--text-main); color: var(--text-main); }
+        
+        .grad-fill { height: 100%; transition: width 0.2s; display: flex; align-items: center; justify-content: flex-end; padding-right: 5px; font-size: 0.8rem; font-weight: bold; color: rgba(0,0,0,0.7); border-radius: 4px; }
+        .grad-fill.benign { background-color: var(--benign); }
+        .grad-fill.attack { background-color: var(--attack); }
+        .grad-fill.net { background-color: var(--primary); }
+
+        /* Diagnosis Box */
+        .diagnosis-box { margin-top: 1rem; padding: 1rem; border-radius: 8px; display: none; }
+        .diagnosis-box.success { background: rgba(16, 185, 129, 0.1); border: 1px solid var(--benign); color: var(--benign); }
+        .diagnosis-box.error { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--attack); color: var(--attack); }
