@@ -351,7 +351,40 @@
             </div>
 
             <div class="card">
-                <h2>II. Matrix Operations as Transformations</h2>
+                <h2>II. Linear Combinations & Span</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>The Language of Vectors</h3>
+                        <p>Most operations are just adding scaled vectors:</p>
+                        <div class="equation-box">$$ w = c_1 \vec{v}_1 + c_2 \vec{v}_2 + \dots $$</div>
+                        <p>The <strong>Span</strong> is the set of <em>all possible</em> points you can reach by tweaking $c_1, c_2$.</p>
+                    </div>
+                    <div>
+                        <h3>Independence & Basis</h3>
+                        <ul>
+                            <li><strong>Dependent:</strong> You can build one vector using the others (redundant).</li>
+                            <li><strong>Basis:</strong> A minimal set of independent vectors that spans the whole space.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>III. Interactive Span Lab</h2>
+                <p>Drag the vector heads ($\vec{u}, \vec{v}$) to change the basis. See how the coordinate grid warps.</p>
+                <div style="background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; min-height: 350px; position: relative;">
+                    <canvas id="spanCanvas" width="400" height="350"></canvas>
+                    <div id="span-status" style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); padding: 5px 10px; border-radius: 4px; font-size: 0.8rem;">
+                        Span: 2D Plane
+                    </div>
+                </div>
+                <div style="margin-top: 10px; font-family: monospace; font-size: 0.9rem; color: var(--text-muted);">
+                    $\vec{u}$ (Red): <span id="val-u">1, 0</span> | $\vec{v}$ (Green): <span id="val-v">0, 1</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>IV. Matrix Operations as Transformations</h2>
                 <p>A Neural Network layer $y = \sigma(Wx + b)$ is just a linear transformation followed by a non-linearity.</p>
                 <div class="grid-2">
                     <div>
@@ -518,38 +551,85 @@
                     </div>
                 </div>
             </div>
+
+            <div class="card">
+                <h2>VII. Integration & Volume</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>Riemann Sums</h3>
+                        <p>Integration is summing infinite slices. Area under a curve.</p>
+                        <div class="equation-box">$$ \int_a^b f(x)dx \approx \sum f(x_i) \Delta x $$</div>
+                    </div>
+                    <div>
+                        <h3>3D Volume Integrals</h3>
+                        <p>Summing voxels to find the mass or volume of a 3D shape.</p>
+                        <div class="equation-box">$$ \iiint_V f(x,y,z) dV $$</div>
+                        <p><strong>DL Context:</strong> Probability normalization (ensuring $\int P(x)dx = 1$) over high-dimensional spaces.</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- SECTION: MATH - PROBABILITY -->
         <section id="math-probability" class="section">
             <header>
                 <h1>Probability: Modeling Uncertainty</h1>
-                <p>The language of uncertainty. How we model noise, confidence, and generating new data.</p>
+                <p>The language of uncertainty. Random Variables, Distributions, and Information.</p>
             </header>
 
             <div class="card">
-                <h2>I. Random Variables & Distributions</h2>
+                <h2>I. Foundations: The Basics</h2>
                 <div class="grid-2">
                     <div>
-                        <h3>Types of Variables</h3>
+                        <h3>Random Variable ($X$)</h3>
+                        <p>A variable whose value is subject to chance. It maps outcomes to numbers.</p>
                         <ul>
-                            <li><strong>Discrete:</strong> Finite outcomes (e.g., Coin flip, Word in vocab). Uses <strong>PMF</strong>.</li>
-                            <li><strong>Continuous:</strong> Infinite outcomes (e.g., Height, Pixel value). Uses <strong>PDF</strong>.</li>
+                            <li><strong>Discrete:</strong> Countable steps (e.g., Coin flips). Uses <strong>PMF</strong>.</li>
+                            <li><strong>Continuous:</strong> Smooth range (e.g., Temperature). Uses <strong>PDF</strong>.</li>
                         </ul>
                     </div>
                     <div>
-                        <h3>Key Distributions in DL</h3>
+                        <h3>Functions of Probability</h3>
                         <ul>
-                            <li><strong>Bernoulli:</strong> Binary Classification ($P(y|x)$).</li>
-                            <li><strong>Categorical:</strong> Multi-class Classification (Softmax).</li>
-                            <li><strong>Gaussian (Normal):</strong> Regression errors, VAE latents.</li>
+                            <li><strong>PMF/PDF ($P(x)$):</strong> How likely is a specific value?</li>
+                            <li><strong>CDF ($F(x)$):</strong> Probability of being $\le x$. Accumulates the PMF.</li>
+                            <li><strong>Expectation ($E[X]$):</strong> The weighted average (mean).</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
             <div class="card">
-                <h2>II. Maximum Likelihood Estimation (MLE)</h2>
+                <h2>II. Distribution Zoo (Interactive)</h2>
+                <p>Visualize how parameters change the shape of common distributions.</p>
+                <div class="grid-2">
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; min-height: 300px;">
+                        <canvas id="distCanvas" width="400" height="300"></canvas>
+                    </div>
+                    <div>
+                        <div class="control-group">
+                            <div class="control-header"><span>Distribution</span></div>
+                            <div style="display: flex; gap: 5px; margin-bottom: 15px;">
+                                <button class="btn btn-outline btn-sm" onclick="setDistMode('bernoulli')">Bernoulli</button>
+                                <button class="btn btn-outline btn-sm" onclick="setDistMode('binomial')">Binomial</button>
+                                <button class="btn btn-outline btn-sm" onclick="setDistMode('poisson')">Poisson</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Dynamic Controls based on selection -->
+                        <div id="dist-controls">
+                            <!-- Injected by JS -->
+                        </div>
+
+                        <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-dark); border-radius: 6px;">
+                            <p id="dist-desc" style="margin:0; font-family: monospace; font-size: 0.9rem;">Select a distribution.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>III. Maximum Likelihood Estimation (MLE)</h2>
                 <p>The bridge between Statisics and Optimization.</p>
                 <div class="equation-box">$$ \theta^* = \arg\max_\theta \prod_{i=1}^N P(x_i | \theta) $$</div>
                 <p>We convert the product to a sum using $\log$ (monotonicity) to get the <strong>Negative Log Likelihood (NLL)</strong> loss.</p>
@@ -558,7 +638,7 @@
             </div>
 
             <div class="card">
-                <h2>III. Information Theory</h2>
+                <h2>IV. Information Theory</h2>
                 <div class="grid-2">
                     <div>
                         <h3>Entropy ($H$)</h3>
@@ -574,7 +654,7 @@
             </div>
 
             <div class="card">
-                <h2>IV. Interactive Likelihood Lab</h2>
+                <h2>V. Interactive Likelihood Lab</h2>
                 <p>Maximize the likelihood of the Gaussian model fitting the data points (blue bars).</p>
                 <div class="grid-2">
                     <div style="background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; min-height: 300px;">
@@ -653,6 +733,24 @@
                         <h4>Batch Matrix Multiplication</h4>
                         <div class="equation-box">$$ C_{bij} = \sum_k A_{bik} B_{bkj} $$</div>
                         <p>Code: <code>einsum('bik,bkj->bij', A, B)</code></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>IV. Tensor Calculus & Backprop</h2>
+                <p>How do we find gradients of shapes? We match dimensions.</p>
+                <div class="grid-2">
+                    <div>
+                        <h3>Example: Linear Layer ($Y = XW$)</h3>
+                        <p>Forward: $(N, D) \times (D, H) \to (N, H)$</p>
+                        <p><strong>Goal:</strong> Find $\frac{\partial L}{\partial W}$. Shape must match $W$ ($D, H$).</p>
+                    </div>
+                    <div>
+                        <h3>The Gradient Rule</h3>
+                        <p>The gradient is the input transposed times the output gradient.</p>
+                        <div class="equation-box">$$ \frac{\partial L}{\partial W} = X^T \cdot \frac{\partial L}{\partial Y} $$</div>
+                        <p>Dim Check: $(D, N) \times (N, H) \to (D, H)$. Matches!</p>
                     </div>
                 </div>
             </div>
@@ -1785,6 +1883,110 @@
             else desc.innerText = `Determinant: ${det.toFixed(2)}`;
         }
 
+        // --- NEW: SPAN VIZ ---
+        let spanState = {
+            u: { x: 1, y: 0 },
+            v: { x: 0, y: 1 },
+            dragging: null
+        };
+
+        function initSpanViz() {
+            const canvas = document.getElementById('spanCanvas');
+            if(!canvas) return;
+            
+            // Event Listeners for Dragging
+            canvas.addEventListener('mousedown', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const mx = (e.clientX - rect.left) / canvas.width * 8 - 4; // Map mouse to [-4, 4]
+                const my = -((e.clientY - rect.top) / canvas.height * 7 - 3.5); // Map mouse to [-3.5, 3.5]
+                
+                // Check dist to u
+                const du = Math.sqrt((mx - spanState.u.x)**2 + (my - spanState.u.y)**2);
+                const dv = Math.sqrt((mx - spanState.v.x)**2 + (my - spanState.v.y)**2);
+                
+                if (du < 0.5) spanState.dragging = 'u';
+                else if (dv < 0.5) spanState.dragging = 'v';
+            });
+            
+            canvas.addEventListener('mousemove', (e) => {
+                if (!spanState.dragging) return;
+                const rect = canvas.getBoundingClientRect();
+                const mx = (e.clientX - rect.left) / canvas.width * 8 - 4;
+                const my = -((e.clientY - rect.top) / canvas.height * 7 - 3.5);
+                
+                if (spanState.dragging === 'u') { spanState.u.x = mx; spanState.u.y = my; }
+                if (spanState.dragging === 'v') { spanState.v.x = mx; spanState.v.y = my; }
+                drawSpanViz();
+            });
+            
+            canvas.addEventListener('mouseup', () => spanState.dragging = null);
+            canvas.addEventListener('mouseleave', () => spanState.dragging = null);
+        }
+
+        function drawSpanViz() {
+            const canvas = document.getElementById('spanCanvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+            const cx = w/2;
+            const cy = h/2;
+            const scale = w/8; // 4 units each side
+
+            const toScreen = (x, y) => ({ sx: cx + x*scale, sy: cy - y*scale });
+
+            ctx.clearRect(0, 0, w, h);
+
+            // 1. Draw Grid (Linear Combinations)
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            
+            const range = 8;
+            for(let i = -range; i <= range; i++) {
+                // Lines parallel to v (varying u coeff)
+                // Start: i*u - range*v, End: i*u + range*v
+                let s = toScreen(i*spanState.u.x - range*spanState.v.x, i*spanState.u.y - range*spanState.v.y);
+                let e = toScreen(i*spanState.u.x + range*spanState.v.x, i*spanState.u.y + range*spanState.v.y);
+                ctx.beginPath(); ctx.moveTo(s.sx, s.sy); ctx.lineTo(e.sx, e.sy); ctx.stroke();
+                
+                // Lines parallel to u (varying v coeff)
+                s = toScreen(-range*spanState.u.x + i*spanState.v.x, -range*spanState.u.y + i*spanState.v.y);
+                e = toScreen(range*spanState.u.x + i*spanState.v.x, range*spanState.u.y + i*spanState.v.y);
+                ctx.beginPath(); ctx.moveTo(s.sx, s.sy); ctx.lineTo(e.sx, e.sy); ctx.stroke();
+            }
+
+            // 2. Draw Vectors
+            const drawVec = (vec, color) => {
+                const head = toScreen(vec.x, vec.y);
+                ctx.strokeStyle = color;
+                ctx.fillStyle = color;
+                ctx.lineWidth = 3;
+                
+                ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(head.sx, head.sy); ctx.stroke();
+                ctx.beginPath(); ctx.arc(head.sx, head.sy, 6, 0, Math.PI*2); ctx.fill();
+            };
+
+            drawVec(spanState.u, '#ef4444'); // Red
+            drawVec(spanState.v, '#10b981'); // Green
+
+            // 3. Updates
+            document.getElementById('val-u').innerText = `${spanState.u.x.toFixed(1)}, ${spanState.u.y.toFixed(1)}`;
+            document.getElementById('val-v').innerText = `${spanState.v.x.toFixed(1)}, ${spanState.v.y.toFixed(1)}`;
+
+            // Check Independence (Determinant)
+            const det = spanState.u.x * spanState.v.y - spanState.u.y * spanState.v.x;
+            const status = document.getElementById('span-status');
+            if (Math.abs(det) < 0.1) {
+                status.innerText = "⚠️ Span: Line (Linearly Dependent!)";
+                status.style.color = "var(--warning)";
+                status.style.border = "1px solid var(--warning)";
+            } else {
+                status.innerText = "Span: 2D Plane (Independent)";
+                status.style.color = "var(--benign)";
+                status.style.border = "1px solid var(--benign)";
+            }
+        }
+
         // --- NEW: GRADIENT DESCENT VIZ ---
         let gradState = { x: 2.0, trace: [] };
 
@@ -1934,6 +2136,132 @@
             }
         }
 
+        // --- NEW: DISTRIBUTION ZOO ---
+        let distMode = 'bernoulli';
+        let distParams = { p: 0.5, n: 10, lambda: 3 };
+
+        function setDistMode(mode) {
+            distMode = mode;
+            const controls = document.getElementById('dist-controls');
+            let html = '';
+
+            if (mode === 'bernoulli') {
+                html = `
+                    <div class="control-group">
+                        <div class="control-header"><span>Probability ($p$)</span><span id="dist-val-p">${distParams.p}</span></div>
+                        <input type="range" min="0" max="1" step="0.05" value="${distParams.p}" oninput="updateDistParam('p', this.value)">
+                    </div>`;
+                document.getElementById('dist-desc').innerText = "Bernoulli(p): Single trial (0 or 1). P(1)=p.";
+            } else if (mode === 'binomial') {
+                html = `
+                    <div class="control-group">
+                        <div class="control-header"><span>Trials ($n$)</span><span id="dist-val-n">${distParams.n}</span></div>
+                        <input type="range" min="1" max="20" step="1" value="${distParams.n}" oninput="updateDistParam('n', this.value)">
+                    </div>
+                    <div class="control-group">
+                        <div class="control-header"><span>Probability ($p$)</span><span id="dist-val-p">${distParams.p}</span></div>
+                        <input type="range" min="0" max="1" step="0.05" value="${distParams.p}" oninput="updateDistParam('p', this.value)">
+                    </div>`;
+                document.getElementById('dist-desc').innerText = "Binomial(n, p): Number of successes in n trials.";
+            } else if (mode === 'poisson') {
+                html = `
+                    <div class="control-group">
+                        <div class="control-header"><span>Rate ($\lambda$)</span><span id="dist-val-lambda">${distParams.lambda}</span></div>
+                        <input type="range" min="0.1" max="10" step="0.1" value="${distParams.lambda}" oninput="updateDistParam('lambda', this.value)">
+                    </div>`;
+                document.getElementById('dist-desc').innerText = "Poisson(λ): Number of events in fixed interval.";
+            }
+            
+            controls.innerHTML = html;
+            drawDistViz();
+        }
+
+        function updateDistParam(key, val) {
+            distParams[key] = parseFloat(val);
+            if(document.getElementById(`dist-val-${key}`))
+                document.getElementById(`dist-val-${key}`).innerText = distParams[key];
+            drawDistViz();
+        }
+
+        function drawDistViz() {
+            const canvas = document.getElementById('distCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+            
+            ctx.clearRect(0, 0, w, h);
+            
+            // Calculate PMF Data
+            let data = [];
+            // Factorial Helper
+            const fact = (n) => n <= 1 ? 1 : n * fact(n-1);
+            const comb = (n, k) => fact(n) / (fact(k) * fact(n-k));
+
+            if (distMode === 'bernoulli') {
+                data = [
+                    { x: 0, p: 1 - distParams.p },
+                    { x: 1, p: distParams.p }
+                ];
+            } else if (distMode === 'binomial') {
+                const { n, p } = distParams;
+                for(let k=0; k<=n; k++) {
+                    const prob = comb(n, k) * Math.pow(p, k) * Math.pow(1-p, n-k);
+                    data.push({ x: k, p: prob });
+                }
+            } else if (distMode === 'poisson') {
+                const { lambda } = distParams;
+                // Cutoff at plausible max (e.g., lambda + 4*sqrt(lambda)) or fixed 15
+                const maxK = Math.ceil(lambda + 4 * Math.sqrt(lambda)) + 2; 
+                for(let k=0; k<=maxK; k++) {
+                    const prob = (Math.pow(lambda, k) * Math.exp(-lambda)) / fact(k);
+                    data.push({ x: k, p: prob });
+                }
+            }
+
+            // Draw Bar Chart
+            const maxVal = Math.max(...data.map(d => d.p)) || 1;
+            const count = data.length;
+            const barW = (w / count) * 0.8;
+            const stepX = w / count;
+
+            // Draw Bars (PMF)
+            ctx.fillStyle = '#3b82f6';
+            data.forEach((d, i) => {
+                const barH = (d.p / maxVal) * (h * 0.8);
+                const x = i * stepX + (stepX - barW)/2;
+                const y = h - barH;
+                
+                ctx.fillRect(x, y, barW, barH);
+                
+                // Label
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '12px monospace';
+                ctx.fillText(d.x, x + barW/2 - 4, h - 5);
+                ctx.fillStyle = '#3b82f6';
+            });
+
+            // Draw CDF Line (Overlay)
+            ctx.beginPath();
+            ctx.strokeStyle = '#f59e0b'; // Orange
+            ctx.lineWidth = 2;
+            let cumSum = 0;
+            data.forEach((d, i) => {
+                cumSum += d.p;
+                const x = i * stepX + stepX/2;
+                const y = h - (cumSum * (h * 0.8)); // CDF is 0-1 mapped to height
+                if (i===0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+                
+                // Dot
+                ctx.fillStyle = '#f59e0b';
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, Math.PI*2);
+                ctx.fill();
+            });
+            ctx.stroke();
+        }
+
         function resetGradient() {
             gradState.x = 2.0; // Start back at the right hill
             drawGradViz();
@@ -2065,10 +2393,13 @@
             updateLab();
             initScenarios();
             updateMatrixViz();
+            initSpanViz();
+            drawSpanViz();
             drawGradViz();
             drawProbViz();
             setVectorMode('sink'); // Init particles
             drawVectorFieldViz();  // Start animation loop
+            setDistMode('bernoulli'); // Init Dist Zoo
         };
 
     </script>
