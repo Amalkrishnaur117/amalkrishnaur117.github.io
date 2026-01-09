@@ -194,13 +194,28 @@
                     <h3><i class="fa-solid fa-square-root-variable"></i> First Principles</h3>
                     <div class="math-stepper">
                         <div class="math-step active">
-                            <h4>Gradient Definition</h4>
-                            <div class="equation-box">\(\nabla = \sum (prediction - target)\)</div>
+                            <h4>1. Gradient Definition</h4>
+                            <div class="equation-box">$$ \nabla_{\theta} = \sum (P(x) - y) $$</div>
+                            <p style="font-size: 0.9rem; color: var(--text-muted)">The gradient is the sum of errors. We want the net gradient to reflect the minority class (Attack) too.</p>
                         </div>
                         <div class="math-step">
-                            <h4>Calculated Values</h4>
-                            <p>\(\nabla_{net} = \)<span id="math-res0" style="color:var(--benign)">9.9</span> + <span id="math-res1" style="color:var(--attack)">-9.9</span></p>
-                            <div class="grad-fill net" id="bar-net" style="width: 0%; margin-top:10px">0.0</div>
+                            <h4>2. Component Breakdown</h4>
+                            <div style="margin-bottom: 0.5rem; font-family: monospace; font-size: 0.9rem;">
+                                <span style="color:var(--benign)">Benign ($\nabla_0$):</span> 
+                                <span id="calc-benign-math">N0 * err</span> = <span id="res-benign-math" style="font-weight:bold">0.0</span>
+                            </div>
+                            <div style="font-family: monospace; font-size: 0.9rem;">
+                                <span style="color:var(--attack)">Attack ($\nabla_1$):</span> 
+                                <span id="calc-attack-math">N1 * err</span> = <span id="res-attack-math" style="font-weight:bold">0.0</span>
+                            </div>
+                        </div>
+                        <div class="math-step">
+                            <h4>3. Net Result & Analysis</h4>
+                            <p>\(\nabla_{net} = \nabla_0 + \nabla_1 \approx\) <span id="res-net-math" style="font-weight:bold; color: white">0.0</span></p>
+                            <div class="grad-fill net" id="bar-net" style="width: 0%; margin-top:10px; margin-bottom: 10px;">0.0</div>
+                            <div id="live-analysis" style="background: rgba(255,255,255,0.05); padding: 0.8rem; border-radius: 6px; font-size: 0.9rem; border-left: 3px solid var(--text-muted);">
+                                Adjust sliders to see analysis.
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -921,8 +936,14 @@
 
             const netGrad = gradBenign + gradAttack;
 
-            document.getElementById('math-res0').innerText = gradBenign.toFixed(1);
-            document.getElementById('math-res1').innerText = gradAttack.toFixed(1);
+            // Update detailed math blocks
+            document.getElementById('calc-benign-math').innerHTML = `${n0} * ${(pred).toFixed(2)}`;
+            document.getElementById('res-benign-math').innerText = gradBenign.toFixed(1);
+            
+            document.getElementById('calc-attack-math').innerHTML = `${n1} * ${(pred - 1).toFixed(2)}`;
+            document.getElementById('res-attack-math').innerText = gradAttack.toFixed(1);
+            
+            document.getElementById('res-net-math').innerText = netGrad.toFixed(1);
 
             // 6. Update Visual Bars (Scale logic: max possible grad is N*1)
             const maxVal = Math.max(Math.abs(gradBenign), Math.abs(gradAttack)) * 1.2 || 1;
@@ -934,6 +955,22 @@
             
             if (netGrad > 0) { netBar.className = 'grad-fill benign'; netBar.style.justifyContent = 'flex-end'; } 
             else { netBar.className = 'grad-fill attack'; netBar.style.justifyContent = 'flex-start'; } 
+            
+            // 7. Live Analysis Logic
+            const analysisBox = document.getElementById('live-analysis');
+            if (Math.abs(netGrad) < (maxVal * 0.05) && n1 < n0 * 0.1 && !state.smote) {
+                analysisBox.innerHTML = "<strong>⚠️ Cancellation Detected:</strong> The benign gradient (positive) is almost perfectly cancelling the attack gradient (negative). The model will stop learning.";
+                analysisBox.style.borderColor = "var(--warning)";
+            } else if (netGrad > (maxVal * 0.5)) {
+                analysisBox.innerHTML = "<strong>Benign Dominance:</strong> The model is being pulled strongly towards predicting 'Benign' for everything.";
+                analysisBox.style.borderColor = "var(--benign)";
+            } else if (netGrad < -(maxVal * 0.5)) {
+                 analysisBox.innerHTML = "<strong>Attack Dominance:</strong> The gradients are forcing the model towards predicting 'Attack'.";
+                 analysisBox.style.borderColor = "var(--attack)";
+            } else {
+                analysisBox.innerHTML = "<strong>Balanced Training:</strong> Gradients are competing, which allows learning.";
+                analysisBox.style.borderColor = "var(--text-muted)";
+            }
         }
 
         let trainingInterval;
@@ -980,7 +1017,7 @@
                 document.getElementById('slider-theta').value = currentTheta;
                 updateLab();
 
-            }, 100);
+            }, 400);
         }
 
         function showSection(id, el) {
