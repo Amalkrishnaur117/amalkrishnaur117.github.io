@@ -302,6 +302,13 @@
             if (window.MathJax && window.MathJax.typesetPromise) {
                 MathJax.typesetPromise();
             }
+
+            // Trigger canvas renders
+            if(id === 'math-calculus') {
+                if(typeof drawGradViz === 'function') drawGradViz();
+                if(typeof drawLineIntViz === 'function') drawLineIntViz();
+                if(typeof drawVectorFieldViz === 'function') drawVectorFieldViz();
+            }
         }
 
         function showMathTab(tabId, el) {

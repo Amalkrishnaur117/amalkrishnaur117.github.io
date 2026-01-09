@@ -531,6 +531,17 @@
                     </div>
                 </div>
             </div>
+
+            <div class="card">
+                <h2>IX. Interactive Line Integral Lab</h2>
+                <p>Calculate the "Work" done by the vector field on a particle moving along the path. Red path elements are "resisted" by the field, Green are "assisted".</p>
+                <div style="background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; min-height: 300px; position: relative;">
+                    <canvas id="lineIntCanvas" width="400" height="300"></canvas>
+                    <div style="position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.7); padding: 5px 10px; border-radius: 4px; font-size: 0.9rem;">
+                        Work ($\int \vec{F} \cdot d\vec{r}$): <span id="line-int-work" style="font-weight: bold; color: white;">0.00</span>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- SECTION: MATH - PROBABILITY -->

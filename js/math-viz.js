@@ -467,6 +467,90 @@
             }
         }
 
+        // --- NEW: LINE INTEGRAL VIZ ---
+        function drawLineIntViz() {
+            const canvas = document.getElementById('lineIntCanvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+
+            const mapX = (x) => (x + 2) / 4 * w;
+            const mapY = (y) => h - (y + 2) / 4 * h;
+            
+            // Using same field from Vector Field Lab
+            const getField = (x, y) => {
+                if (vecMode === 'sink') return { x: -x, y: -y };
+                if (vecMode === 'saddle') return { x: x, y: -y };
+                if (vecMode === 'curl') return { x: -y, y: x };
+                return { x: 0, y: 0 };
+            };
+
+            ctx.clearRect(0,0,w,h);
+
+            // 1. Draw Field Arrows (faintly)
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+            ctx.lineWidth = 1;
+            const step = 0.4;
+            for(let x=-2; x<=2; x+=step) {
+                for(let y=-2; y<=2; y+=step) {
+                    const f = getField(x,y);
+                    const mag = Math.sqrt(f.x*f.x + f.y*f.y);
+                    if(mag < 0.01) continue;
+                    
+                    const drawLen = 0.15; 
+                    const dx = (f.x / mag) * drawLen;
+                    const dy = (f.y / mag) * drawLen;
+
+                    ctx.beginPath();
+                    ctx.moveTo(mapX(x), mapY(y));
+                    ctx.lineTo(mapX(x + dx), mapY(y + dy));
+                    ctx.stroke();
+                }
+            }
+
+            // 2. Define Path & Calculate Work
+            const path = [];
+            for (let t=0; t <= 1; t+=0.02) {
+                // A simple parabola path r(t)
+                const x = -1.5 + 3*t;
+                const y = 2*(x*x) - 2;
+                path.push({x, y});
+            }
+
+            let totalWork = 0;
+            ctx.lineWidth = 4;
+            for (let i = 0; i < path.length - 1; i++) {
+                const p1 = path[i];
+                const p2 = path[i+1];
+                
+                const midX = (p1.x + p2.x) / 2;
+                const midY = (p1.y + p2.y) / 2;
+                
+                const dr = { x: p2.x - p1.x, y: p2.y - p1.y };
+                const F = getField(midX, midY);
+                
+                const work_segment = F.x * dr.x + F.y * dr.y;
+                totalWork += work_segment;
+
+                // Color path segment by work
+                // Green = Assisted, Red = Resisted
+                if (work_segment > 0) ctx.strokeStyle = `rgba(16, 185, 129, ${Math.min(1, work_segment*2)})`;
+                else ctx.strokeStyle = `rgba(239, 68, 68, ${Math.min(1, -work_segment*2)})`;
+                
+                ctx.beginPath();
+                ctx.moveTo(mapX(p1.x), mapY(p1.y));
+                ctx.lineTo(mapX(p2.x), mapY(p2.y));
+                ctx.stroke();
+            }
+            
+            // Update UI
+            const workEl = document.getElementById('line-int-work');
+            workEl.innerText = totalWork.toFixed(2);
+            if(totalWork > 0) workEl.style.color = 'var(--benign)';
+            else workEl.style.color = 'var(--attack)';
+        }
+
         // --- VECTOR FIELD VIZ ---
         let vecMode = 'sink';
         let particles = [];
@@ -481,6 +565,11 @@
                     y: (Math.random() - 0.5) * 4,
                     age: Math.random() * 50
                 });
+            }
+
+            // Redraw line integral viz too
+            if (typeof drawLineIntViz === 'function') {
+                drawLineIntViz();
             }
         }
 
